@@ -3,4 +3,7 @@
     <string name="basically">基本实现</string>
     <string name="filter">过滤观察者</string>
     <string name="schedulers">Schedulers</string>
+    <string name="input_message">输入数据或信息</string>
+    <string name="send">Send</string>
+    <string name="result">结果：%1$s</string>
 </resources>

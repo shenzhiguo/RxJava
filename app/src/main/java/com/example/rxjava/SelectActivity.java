@@ -14,6 +14,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
 public class SelectActivity extends AppCompatActivity {
 
     @BindView(R.id.gv_basic)
@@ -37,20 +38,27 @@ public class SelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mBasicGv.setAdapter(new ObservablesAdapter(SelectActivity.this,ArrayToList(funcitons)));
-        mFilterGv.setAdapter(new ObservablesAdapter(SelectActivity.this,ArrayToList(filters)));
+        ObservablesAdapter basicAdapter = new ObservablesAdapter(SelectActivity.this,ArrayToList(funcitons),BaseEntity.BASIC_MODE);
 
-        mBasicGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-        });
+        mBasicGv.setAdapter(basicAdapter);
+        mFilterGv.setAdapter(new ObservablesAdapter(SelectActivity.this,ArrayToList(filters),BaseEntity.FILTER_MODE));
 
         mFilterGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(getLocalClassName(),""+id);
+            }
+        });
 
+        mFilterGv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(getLocalClassName(), "I am select!");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.i(getLocalClassName(), "I am no select!");
             }
         });
 
@@ -60,6 +68,11 @@ public class SelectActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private ArrayList<String> ArrayToList(String[] arrays){

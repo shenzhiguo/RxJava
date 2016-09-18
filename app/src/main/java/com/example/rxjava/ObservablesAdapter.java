@@ -1,6 +1,8 @@
 package com.example.rxjava;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +12,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by shenzg0418 on 2016/9/18.
+ * Created by shenzg0418 on 2016/9/18
  */
 public class ObservablesAdapter extends BaseAdapter{
 
     private Context mContext;
     private ArrayList<String> mList;
+    private int mTopMode;
+    private int actualMode;
 
-    ObservablesAdapter(Context context, ArrayList<String> list){
+    ObservablesAdapter(Context context, ArrayList<String> list, int topMode){
         mContext = context;
         mList = list;
+        mTopMode = topMode;
     }
 
     @Override
@@ -51,7 +56,24 @@ public class ObservablesAdapter extends BaseAdapter{
 
         holderView.textView.setText(mList.get(i));
 
+        holderView.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (mTopMode) {
+                    case BaseEntity.BASIC_MODE:
+                        startBasicActivity(101);
+                        break;
+                }
+            }
+        });
+
         return view;
+    }
+
+    public void startBasicActivity(int mode){
+        Intent intent = new Intent(mContext,BasicActivity.class);
+        intent.putExtra("mode", mode);
+        mContext.startActivity(intent);
     }
 
     class HolderView {
