@@ -2,9 +2,7 @@ package com.example.rxjava;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 
@@ -42,25 +40,6 @@ public class SelectActivity extends AppCompatActivity {
 
         mBasicGv.setAdapter(basicAdapter);
         mFilterGv.setAdapter(new ObservablesAdapter(SelectActivity.this,ArrayToList(filters),BaseEntity.FILTER_MODE));
-
-        mFilterGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(getLocalClassName(),""+id);
-            }
-        });
-
-        mFilterGv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(getLocalClassName(), "I am select!");
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Log.i(getLocalClassName(), "I am no select!");
-            }
-        });
 
         mSchedulerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
