@@ -52,6 +52,7 @@ public class FilterActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int mode = intent.getIntExtra("mode", 200);
+        mSequenceTv.setText("");
         normal();
         mList.clear();
         switch (mode){
@@ -92,7 +93,6 @@ public class FilterActivity extends AppCompatActivity {
                 debounce();
                 break;
         }
-        mSequenceTv.setText("");
     }
 
     private void normal(){
@@ -141,6 +141,7 @@ public class FilterActivity extends AppCompatActivity {
     /* 过滤掉重复的数据项 */
     private void distinct(){
         Observable<Integer> ob = Observable.just(1,1,2,2,3,4,4,1,1,5);
+        mSequenceTv.setText("");
         ob.subscribe(showAction);
         ob.distinct().subscribe(action);
     }
@@ -163,22 +164,25 @@ public class FilterActivity extends AppCompatActivity {
 
     /* 从0 开始 */
     private void elementAt(){
-        observable.elementAt(0).subscribe(action);
+        observable.elementAt(5).subscribe(action);
     }
 
+    /* 每到一个时刻发送该视口获得的数据 */
     private void sample(){
         Observable<Integer> ob = Observable.create(new Observable.OnSubscribe<Integer>() {
             @Override
             public void call(Subscriber<? super Integer> subscriber) {
                 for (int i = 0; i < 10; i++) {
                     subscriber.onNext(i);
-                    sleep(100);
+                    sleep(200);
                 }
             }
         });
+        mSequenceTv.setText("");
         ob.subscribe(showAction);
         ob.subscribeOn(Schedulers.newThread())
                 .sample(1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(action);
     }
 
