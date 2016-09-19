@@ -20,6 +20,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 public class FilterActivity extends AppCompatActivity {
@@ -92,6 +93,16 @@ public class FilterActivity extends AppCompatActivity {
             case BaseEntity.DEBOUNCE:
                 debounce();
                 break;
+            case BaseEntity.MERGE_MODE:
+                merge();
+                break;
+            case BaseEntity.ZIP_MODE:
+                zip();
+                break;
+            case BaseEntity.JOIN_MODE:
+                join();
+                break;
+
         }
     }
 
@@ -233,6 +244,58 @@ public class FilterActivity extends AppCompatActivity {
             .debounce(1,TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(action);
+    }
+
+    private void merge(){
+        Observable<Integer> ob1 = Observable.just(1,2,3);
+        Observable<Integer> ob2 = Observable.just(4,5,6);
+
+        mSequenceTv.setText("");
+        ob1.subscribe(showAction);
+        ob2.subscribe(showAction);
+
+        ob1.mergeWith(ob2).subscribe(action);
+    }
+    
+    private void zip(){
+        Observable<Integer> ob1 = Observable.just(1,2,3);
+        Observable<Integer> ob2 = Observable.just(11, 22, 33);
+
+        mSequenceTv.setText("");
+        ob1.subscribe(showAction);
+        ob2.subscribe(showAction);
+
+
+        ob1.zipWith(ob2, new Func2<Integer, Integer, Integer>() {
+
+                    @Override
+                    public Integer call(Integer integer, Integer integer2) {
+                        return integer+integer2*3;
+                    }
+                }).subscribe(action);
+    }
+
+    private void join(){
+        Observable<Integer> right = Observable.just(3);
+        Func1<Integer,Observable<Integer>> ld = new Func1<Integer, Observable<Integer>>() {
+            @Override
+            public Observable<Integer> call(Integer integer) {
+                return Observable.just(integer*2);
+            }
+        };
+        Func1<Integer,Observable<Integer>> rd = new Func1<Integer, Observable<Integer>>() {
+            @Override
+            public Observable<Integer> call(Integer integer) {
+                return Observable.just(integer*3);
+            }
+        };
+        Func2<Integer,Integer,Integer> result = new Func2<Integer, Integer, Integer>() {
+            @Override
+            public Integer call(Integer integer, Integer integer2) {
+                return integer*integer2;
+            }
+        };
+        Observable.just(2).join(right,ld,rd,result).subscribe(action);
     }
 
     private void sleep(long times){

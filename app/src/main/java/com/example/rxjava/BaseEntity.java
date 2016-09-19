@@ -27,4 +27,8 @@ public interface BaseEntity {
     public static final int SAMPLING_MODE = 209;
     public static final int TIMEOUT_MODE = 210;
     public static final int DEBOUNCE = 211;
+
+    public static final int MERGE_MODE = 300;
+    public static final int ZIP_MODE = 301;
+    public static final int JOIN_MODE = 302;
 }

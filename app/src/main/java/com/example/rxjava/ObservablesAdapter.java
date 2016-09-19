@@ -148,6 +148,15 @@ public class ObservablesAdapter extends BaseAdapter{
                 case 11:
                     mActualMode = BaseEntity.DEBOUNCE;
                     break;
+                case 12:
+                    mActualMode = BaseEntity.MERGE_MODE;
+                    break;
+                case 13:
+                    mActualMode = BaseEntity.ZIP_MODE;
+                    break;
+                case 14:
+                    mActualMode = BaseEntity.JOIN_MODE;
+                    break;
                 default:
                     break;
             }
