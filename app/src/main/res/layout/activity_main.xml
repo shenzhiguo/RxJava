@@ -21,6 +21,7 @@
         android:id="@+id/gv_basic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:verticalSpacing="10dp"
         android:numColumns="4"
         android:gravity="center"/>
@@ -37,6 +38,7 @@
         android:id="@+id/gv_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:verticalSpacing="10dp"
         android:numColumns="4"
         android:gravity="center"/>
@@ -48,6 +50,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/schedulers"
         android:textSize="24sp"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:visibility="gone"/>
 
 </LinearLayout>
