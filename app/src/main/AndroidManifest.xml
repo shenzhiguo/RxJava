@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BasicActivity"></activity>
+        <activity android:name=".BasicActivity" />
+        <activity android:name=".FilterActivity"></activity>
     </application>
 
 </manifest>

@@ -65,6 +65,7 @@ public class ObservablesAdapter extends BaseAdapter{
                         startBasicActivity(mActualMode);
                         break;
                     case BaseEntity.FILTER_MODE:
+                        startFilterActivity(mActualMode);
                         break;
                 }
             }
@@ -75,6 +76,12 @@ public class ObservablesAdapter extends BaseAdapter{
 
     public void startBasicActivity(int mode){
         Intent intent = new Intent(mContext,BasicActivity.class);
+        intent.putExtra("mode", mode);
+        mContext.startActivity(intent);
+    }
+
+    public void startFilterActivity(int mode){
+        Intent intent = new Intent(mContext,FilterActivity.class);
         intent.putExtra("mode", mode);
         mContext.startActivity(intent);
     }
@@ -104,7 +111,46 @@ public class ObservablesAdapter extends BaseAdapter{
                     break;
             }
         }else{
-
+            switch (position){
+                case 0:
+                    mActualMode = BaseEntity.EXT_FILTER_MODE;
+                    break;
+                case 1:
+                    mActualMode = BaseEntity.TAKE_MODE;
+                    break;
+                case 2:
+                    mActualMode = BaseEntity.TAKE_LAST_MODE;
+                    break;
+                case 3:
+                    mActualMode = BaseEntity.DISTINCT_MODE;
+                    break;
+                case 4:
+                    mActualMode = BaseEntity.FIRST_MODE;
+                    break;
+                case 5:
+                    mActualMode = BaseEntity.LAST_MODE;
+                    break;
+                case 6:
+                    mActualMode = BaseEntity.SKIP_MODE;
+                    break;
+                case 7:
+                    mActualMode = BaseEntity.SKIP_LAST_MODE;
+                    break;
+                case 8:
+                    mActualMode = BaseEntity.ELEMENT_AT_MODE;
+                    break;
+                case 9:
+                    mActualMode = BaseEntity.SAMPLING_MODE;
+                    break;
+                case 10:
+                    mActualMode = BaseEntity.TIMEOUT_MODE;
+                    break;
+                case 11:
+                    mActualMode = BaseEntity.DEBOUNCE;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
