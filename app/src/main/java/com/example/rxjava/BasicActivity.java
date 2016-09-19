@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
@@ -68,15 +70,16 @@ public class BasicActivity extends AppCompatActivity {
 
         mArrayAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1,mList);
         mInfomationLv.setAdapter(mArrayAdapter);
-    }
 
-    @OnClick(R.id.btn_send) void send(){
         switch (mode) {
             case BaseEntity.EXT_MODE:
                 ext();
                 break;
             case BaseEntity.JUST_MODE:
-                just();
+                mMessageEt.setVisibility(View.VISIBLE);
+                mSendBtn.setVisibility(View.VISIBLE);
+                mResultTv.setVisibility(View.VISIBLE);
+                mInfomationLv.setVisibility(View.GONE);
                 break;
             case  BaseEntity.FROM_MODE:
                 from();
@@ -91,6 +94,10 @@ public class BasicActivity extends AppCompatActivity {
                 flatMap();
                 break;
         }
+    }
+
+    @OnClick(R.id.btn_send) void send(){
+        just();
     }
 
     private void ext(){
@@ -121,16 +128,24 @@ public class BasicActivity extends AppCompatActivity {
 
             @Override
             public void onNext(Integer integer) {
-                Toast.makeText(BasicActivity.this, ""+integer, Toast.LENGTH_SHORT).show();
+                mList.add(integer);
+                mArrayAdapter.notifyDataSetChanged();
             }
         };
         observable.subscribe(sub);
+
+        try{
+            Thread.sleep(2000);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         a = 7;
         b = 8;
         observable.subscribe(sub);
     }
 
+    /* 发送一串指定值 */
     private void just(){
         Observable.just(mMessageEt.getText().toString()).subscribe(new Subscriber<String>() {
             @Override
@@ -150,6 +165,7 @@ public class BasicActivity extends AppCompatActivity {
         });
     }
 
+    /* 发送一个可迭代序列 */
     public void from(){
         List<Integer> items = new ArrayList<Integer>();
         items.add(1);
@@ -175,6 +191,7 @@ public class BasicActivity extends AppCompatActivity {
         });
     }
 
+    /* 每次订阅都创建新的Observables对象 */
     private void defer(){
         mTimerAdapter = new ArrayAdapter<Long>(mContext,android.R.layout.simple_list_item_1,mTimeList);
         mInfomationLv.setAdapter(mTimerAdapter);
@@ -207,12 +224,43 @@ public class BasicActivity extends AppCompatActivity {
         });
     }
 
+    /* 对发射的数据进行变幻 */
     private void map(){
+        Observable.range(1,10).map(new Func1<Integer, Integer>() {
+            @Override
+            public Integer call(Integer integer) {
+                return integer*2;
+            }
+        }).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                mList.add(integer);
+                mArrayAdapter.notifyDataSetChanged();
+            }
+        });
 
     }
 
+    /* 发射数据集合 -> Observables集合*/
     private void flatMap(){
-
+        Observable.range(1,10).flatMap(new Func1<Integer, Observable<Integer>>() {
+            @Override
+            public Observable<Integer> call(final Integer integer) {
+                return Observable.create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        subscriber.onNext(integer);
+                        subscriber.onCompleted();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread());
+            }
+        }).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                mList.add(integer);
+                mArrayAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 }

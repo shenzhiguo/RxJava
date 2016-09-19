@@ -23,7 +23,8 @@
             android:hint="@string/input_message"
             android:textSize="14sp"
             android:textColorHint="@android:color/darker_gray"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btn_send"
@@ -31,7 +32,8 @@
             android:layout_height="wrap_content"
             android:text="@string/send"
             android:textColor="@android:color/black"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
@@ -41,7 +43,8 @@
         android:layout_height="wrap_content"
         android:text="@string/result"
         android:textColor="@android:color/holo_blue_bright"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/lv_information"
